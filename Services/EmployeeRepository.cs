@@ -23,26 +23,26 @@ namespace EmployeeManagementAPI.Services
 
         public async Task<int> DeleteEmployeeAsync(int Id)
         {
-            var res= _dbContext.EmployeeManages.Where(x=>x.Id==Id).FirstOrDefault();
-            _dbContext.EmployeeManages.Remove(res);
+            var result= _dbContext.EmployeeManages.Where(x=>x.Id==Id).FirstOrDefault();
+            _dbContext.EmployeeManages.Remove(result);
             return await _dbContext.SaveChangesAsync();
         }
 
         public async Task<EmployeeManage> GetEmployeeManageByIdAsync(int Id)
         {
-            var data = await _dbContext.EmployeeManages.Where(x=>x.Id==Id).FirstOrDefaultAsync();
-            return data;
+            var EmployeeId = await _dbContext.EmployeeManages.Where(x=>x.Id==Id).FirstOrDefaultAsync();
+            return  EmployeeId;
         }
 
         public async Task<List<EmployeeManage>> GetEmployeeManagesListAsync() 
         {
-            var data= await _dbContext.EmployeeManages.ToListAsync();
-            return data;
+            var EmployeeList= await _dbContext.EmployeeManages.ToListAsync();
+            return  EmployeeList;
         }
 
-        public async Task<int> UpdateEmployeeAsync(EmployeeManage employeeManage)
+        public async Task<int> UpdateEmployeeAsync(EmployeeManage updateEmployee)
         {
-            _dbContext.EmployeeManages.Update(employeeManage);
+            _dbContext.EmployeeManages.Update(updateEmployee);
             return await _dbContext.SaveChangesAsync();
         }
     }
