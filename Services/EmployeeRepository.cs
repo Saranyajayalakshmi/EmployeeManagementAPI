@@ -14,9 +14,9 @@ namespace EmployeeManagementAPI.Services
             _dbContext= dbContext;
         }
 
-        public async Task<EmployeeManage> AddEmployeeAsync(EmployeeManage employeeManage)
+        public async Task<EmployeeManage> AddEmployeeAsync(EmployeeManage AddEmployee)
         {
-            var result= _dbContext.EmployeeManages.Add(employeeManage);
+            var result= _dbContext.EmployeeManages.Add(AddEmployee);
             await _dbContext.SaveChangesAsync();
             return result.Entity;
         }
