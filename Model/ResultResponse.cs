@@ -6,6 +6,6 @@
         /// <summary>
         /// 
         /// </summary>
-        public string additionalInfo { get; set; }
+        public string? additionalInfo { get; set; }
     }
 }

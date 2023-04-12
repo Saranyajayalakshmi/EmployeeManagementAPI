@@ -1,5 +1,10 @@
 ﻿using EmployeeManagementAPI.Data;
 using EmployeeManagementAPI.Data.Command;
+using EmployeeManagementAPI.Data.Command.Create;
+using EmployeeManagementAPI.Data.Command.Delete;
+using EmployeeManagementAPI.Data.Command.Update;
+using EmployeeManagementAPI.Data.Handlers;
+using EmployeeManagementAPI.Data.Query;
 using EmployeeManagementAPI.Model;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -32,23 +37,32 @@ namespace EmployeeManagementAPI.Controllers
         [HttpGet("{id}")]
         public async Task<EmployeeManage> EmployeeById(int id)
         {
+           
             var employeeId = await _mediator.Send(new GetEmployeeByIdQuery() { Id=id });
             return employeeId;
         }
 
         // POST api/<EmployeeManageController>
         [HttpPost]
-        public async Task<ResultResponse> AddEmployee(EmployeeManage addEmployee)
+        public async Task<IActionResult> AddEmployee(EmployeeManage addEmployee)
         {
-            var result = await _mediator.Send(new CreateEmployee(
-                addEmployee.FirstName,
-                addEmployee.Email,
-                addEmployee.Phone,
-                addEmployee.Address,
-                addEmployee.Marritalstatus,
-                addEmployee.DOJ
-                ));
-            return result;
+            if (addEmployee==null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, addEmployee);
+            }
+            else
+            {
+                var result = await _mediator.Send(new CreateEmployee(
+                    addEmployee.FirstName,
+                    addEmployee.Email,
+                    addEmployee.Phone,
+                    addEmployee.Address,
+                    addEmployee.MarritalStatus,
+                    addEmployee.DOJ
+                    ));
+
+                return Ok(result);
+            }
         }
 
 
@@ -62,7 +76,7 @@ namespace EmployeeManagementAPI.Controllers
                 updateEmployee.Email,
                 updateEmployee.Phone,
                 updateEmployee.Address,
-                updateEmployee.Marritalstatus,
+                updateEmployee.MarritalStatus,
                 updateEmployee.DOJ));
             return ValueReturn;
         }

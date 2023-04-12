@@ -1,4 +1,5 @@
-﻿using EmployeeManagementAPI.Model;
+﻿using EmployeeManagementAPI.Data.Query;
+using EmployeeManagementAPI.Model;
 using EmployeeManagementAPI.Services;
 using MediatR;
 
@@ -12,6 +13,12 @@ namespace EmployeeManagementAPI.Data.Handlers
         {
             _employeeRepository=employeeRepository;
         }
+        /// <summary>
+        /// Requesting Handle Process By Employee list
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
 
         public async Task<List<EmployeeManage>> Handle(GetEmployeeListQuery request, CancellationToken cancellationToken)
         {

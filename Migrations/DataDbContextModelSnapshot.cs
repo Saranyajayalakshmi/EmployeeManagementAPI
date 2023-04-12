@@ -45,7 +45,7 @@ namespace EmployeeManagementAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Maritalstatus")
+                    b.Property<string>("MarritalStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

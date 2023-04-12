@@ -1,5 +1,6 @@
 ﻿using EmployeeManagementAPI.Data;
 using EmployeeManagementAPI.Model;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
@@ -30,6 +31,7 @@ namespace EmployeeManagementAPI.Services
 
         public async Task<EmployeeManage> GetEmployeeManageByIdAsync(int Id)
         {
+            
             var EmployeeId = await _dbContext.EmployeeManages.Where(x=>x.Id==Id).FirstOrDefaultAsync();
             return  EmployeeId;
         }

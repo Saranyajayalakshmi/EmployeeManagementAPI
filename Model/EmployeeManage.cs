@@ -3,30 +3,27 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EmployeeManagementAPI.Model
 {
-    public class EmployeeManage
+    public class EmployeeManage : IValidatableObject
     {
-       
-        public int Id { get; set; } 
-       /// <summary>
-       /// Employee Details 
-       /// </summary>
-        public string FirstName { get; set; }
-        [EmailAddress]
-        public string Email { get; set; }
-        public string Phone { get; set; }
-       
-        public string Address { get; set; }
-        public string Maritalstatus { get; set; }
-        public DateTime DOJ { get; set; }
-        
-    }
-    public class employeValdite : AbstractValidator<EmployeeManage>
-    {
-        public employeValdite() {
-        
-            RuleFor(model => model.Address).MaximumLength(8);
-          
+        /// <summary>
+        /// Employee Details
+        /// </summary>
 
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+
+        public string Email { get; set; }
+        [Required(ErrorMessage = "Please enter phone number")]
+        public string Phone { get; set; }
+        public string Address { get; set; }
+        public string MarritalStatus { get; set; }
+
+        public DateTime DOJ { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(System.ComponentModel.DataAnnotations.ValidationContext validationContext)
+        {
+            if (DOJ.Year<2022)
+                yield return new ValidationResult("Date is Incorrect");
         }
     }
 }

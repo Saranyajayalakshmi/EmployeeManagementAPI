@@ -8,6 +8,9 @@ namespace EmployeeManagementAPI.Data
         public DataDbContext(DbContextOptions options) : base(options)
         {
         }
+        /// <summary>
+        /// DatabaseSet for EmployeeManage class
+        /// </summary>
         public DbSet<EmployeeManage> EmployeeManages { get; set; }
     }
 }

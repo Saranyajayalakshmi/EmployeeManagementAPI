@@ -21,7 +21,7 @@ namespace EmployeeManagementAPI.Migrations
                     EMail = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Marritalstatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Maritalstatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DOJ = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>

@@ -6,8 +6,8 @@ namespace EmployeeManagementAPI.Services
     {
         public Task<List<EmployeeManage>> GetEmployeeManagesListAsync();
         public Task<EmployeeManage> GetEmployeeManageByIdAsync(int Id);
-        public Task<EmployeeManage> AddEmployeeAsync(EmployeeManage employeeManage);
+       // public Task<EmployeeManage> AddEmployeeAsync(EmployeeManage employeeManage);
         public Task<int> UpdateEmployeeAsync(EmployeeManage employeeManage);
-        public Task<int> DeleteEmployeeAsync(int Id);
+       // public Task<int> DeleteEmployeeAsync(int Id);
     }
 }
