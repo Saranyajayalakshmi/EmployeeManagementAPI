@@ -1,5 +1,5 @@
 using EmployeeManagementAPI.Data;
-using EmployeeManagementAPI.Services;
+
 using Microsoft.EntityFrameworkCore;
 using MediatR;
 using System.Reflection;
@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<DataDbContext>(options=>options.UseSqlServer
 (builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<DataDbContext,DataDbContext>();
 builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 
 // Add services to the container.
@@ -25,7 +25,7 @@ builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 builder.Services.AddControllers();
 //.AddFluentValidation(c =>
 //c.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()));
-builder.Services.AddValidatorsFromAssembly(typeof(EmployeeRepository).Assembly);
+builder.Services.AddValidatorsFromAssembly(typeof(DataDbContext).Assembly);
 builder.Services.AddSingleton(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
 

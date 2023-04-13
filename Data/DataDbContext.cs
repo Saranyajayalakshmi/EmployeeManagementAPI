@@ -9,8 +9,8 @@ namespace EmployeeManagementAPI.Data
         {
         }
         /// <summary>
-        /// DatabaseSet for EmployeeManage class
+        /// DatabaseSet for EmployeeManagementApplication class
         /// </summary>
-        public DbSet<EmployeeManage> EmployeeManages { get; set; }
+        public DbSet<EmployeeManagementApplication> managementApplications { get; set; }
     }
 }

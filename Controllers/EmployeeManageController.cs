@@ -15,6 +15,8 @@ namespace EmployeeManagementAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    // Adding Mediator in Controller
+
     public class EmployeeManageController : ControllerBase
     {
         private IMediator _mediator;
@@ -23,70 +25,111 @@ namespace EmployeeManagementAPI.Controllers
         {
             _mediator=mediator;
         }
-
+        /// <summary>
+        /// Getting EmployeeManagementList by using Query & Request Handler
+        /// </summary>
+        /// <returns></returns>
         // GET: api/<EmployeeManageController>
         [HttpGet]
-        // [Route("api/[EmployeeList]")]
-        public async Task<List<EmployeeManage>> EmployeeList()
+
+        public async Task<List<EmployeeManagementApplication>> EmployeeManagementListDetails()
         {
             var employeelist = await _mediator.Send(new GetEmployeeListQuery());
             return employeelist;
         }
 
+
+        /// <summary>
+        /// Getting EmployeeDetails with EmployeeId using RequestHandler
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+
         // GET api/<EmployeeManageController>/5
         [HttpGet("{id}")]
-        public async Task<EmployeeManage> EmployeeById(int id)
+        public async Task<EmployeeManagementApplication> EmployeeManagementDetailsById(int id)
         {
-           
+
             var employeeId = await _mediator.Send(new GetEmployeeByIdQuery() { Id=id });
             return employeeId;
         }
 
+        /// <summary>
+        /// Adding EmployeeDetails
+        /// </summary>
+        /// <param name="addEmployee"></param>
+        /// <returns></returns>
+
         // POST api/<EmployeeManageController>
         [HttpPost]
-        public async Task<IActionResult> AddEmployee(EmployeeManage addEmployee)
+        public async Task<IActionResult> AddEmployeeDetails(CreateUser addEmployee)
         {
+            //EmployeeDetails is null throws StatusError
             if (addEmployee==null)
             {
                 return StatusCode(StatusCodes.Status400BadRequest, addEmployee);
             }
             else
             {
-                var result = await _mediator.Send(new CreateEmployee(
-                    addEmployee.FirstName,
-                    addEmployee.Email,
-                    addEmployee.Phone,
-                    addEmployee.Address,
-                    addEmployee.MarritalStatus,
-                    addEmployee.DOJ
+                var result = await _mediator.Send(new CreateUser(
+                    addEmployee.EmployeeName,
+                    addEmployee.EmployeeEmailId,
+                    addEmployee.EmployeeMobileNumber,
+                    addEmployee.EmployeeAddress,
+                    addEmployee.EmployeeMaritalStatus,
+                    addEmployee.EmployeeDateOfJoining
                     ));
 
                 return Ok(result);
             }
         }
 
+        /// <summary>
+        /// Updating EmployeeManagementDetails Check with null values
+        /// </summary>
+        /// <param name="updateEmployee"></param>
+        /// <returns></returns>
 
         // PUT api/<EmployeeManageController>/5
         [HttpPut("{id}")]
-        public async Task<int> UpdateEmployee(EmployeeManage updateEmployee)
+        public async Task<IActionResult> UpdateEmployeeDetails(UpdateUser updateEmployee)
         {
-            var ValueReturn = await _mediator.Send(new UpdateEmployee
-                (updateEmployee.Id,
-                updateEmployee.FirstName,
-                updateEmployee.Email,
-                updateEmployee.Phone,
-                updateEmployee.Address,
-                updateEmployee.MarritalStatus,
-                updateEmployee.DOJ));
-            return ValueReturn;
+            //EmployeeId is null throws StatusError
+            if (updateEmployee==null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, updateEmployee);
+            }
+            else
+            {
+                var ValueReturn = await _mediator.Send(new UpdateUser
+                (updateEmployee.EmployeeID,
+                updateEmployee.EmployeeName,
+                updateEmployee.EmployeeEmailId,
+                updateEmployee.EmployeeMobileNumber,
+                updateEmployee.EmployeeAddress,
+                updateEmployee.EmployeeMaritalStatus,
+                updateEmployee.EmployeeDateOfJoining));
+                return Ok(ValueReturn);
+            }
+
         }
+
+
+        /// <summary>
+        /// Delete EmployeeDetails by EmployeeId
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
 
         // DELETE api/<EmployeeManageController>/5
         [HttpDelete("{id}")]
 
-        public async Task<int> DeleteEmployee(int id)
+        public Task<ResultResponse> DeleteEmployeeDetails(int id)
         {
-            return await _mediator.Send(new DeleteEmployee() { Id=id });
+
+            var result = _mediator.Send(new DeleteUser() { EmployeeId=id });
+
+            return result;
         }
     }
 }

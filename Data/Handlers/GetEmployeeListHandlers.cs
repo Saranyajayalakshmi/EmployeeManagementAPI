@@ -1,17 +1,21 @@
 ﻿using EmployeeManagementAPI.Data.Query;
 using EmployeeManagementAPI.Model;
-using EmployeeManagementAPI.Services;
+
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagementAPI.Data.Handlers
 {
-    public class GetEmployeeListHandlers : IRequestHandler<GetEmployeeListQuery,List<EmployeeManage>>
+    public class GetEmployeeListHandlers : IRequestHandler<GetEmployeeListQuery,List<EmployeeManagementApplication>>
     {
-        private readonly IEmployeeRepository _employeeRepository;
 
-        public GetEmployeeListHandlers(IEmployeeRepository employeeRepository)
+        private readonly DataDbContext _dbContext;
+
+       
+
+        public GetEmployeeListHandlers(DataDbContext dbContext)
         {
-            _employeeRepository=employeeRepository;
+            _dbContext = dbContext;
         }
         /// <summary>
         /// Requesting Handle Process By Employee list
@@ -20,9 +24,12 @@ namespace EmployeeManagementAPI.Data.Handlers
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
 
-        public async Task<List<EmployeeManage>> Handle(GetEmployeeListQuery request, CancellationToken cancellationToken)
+        
+
+        public async Task<List<EmployeeManagementApplication>> Handle(GetEmployeeListQuery request, CancellationToken cancellationToken)
         {
-            return await _employeeRepository.GetEmployeeManagesListAsync();
+            var emp = await _dbContext.managementApplications.ToListAsync();
+            return emp;
         }
     }
 }

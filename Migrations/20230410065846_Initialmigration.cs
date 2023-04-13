@@ -19,7 +19,7 @@ namespace EmployeeManagementAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EMail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MobileNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Maritalstatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DOJ = table.Column<DateTime>(type: "datetime2", nullable: false)

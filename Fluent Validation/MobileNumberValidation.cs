@@ -4,19 +4,19 @@ using System.Text.RegularExpressions;
 
 namespace EmployeeManagementAPI.Fluent_Validation
 {
-    public class PhoneValidation : PropertyValidator
+    public class MobileNumberValidation : PropertyValidator
     {
-        public PhoneValidation() : base("Please enter the PhoneNumber")
+        public MobileNumberValidation() : base("Enter Vaild MobileNumber")
         {
         }
 
         protected override bool IsValid(PropertyValidatorContext context)
         {
-            Regex regex = new Regex(@"^[0-9]$",RegexOptions.IgnoreCase);
-            if (context != null)
+           var data = context.PropertyValue.ToString();
+            if (data.Length>= 9)
             {
                 
-               return regex.IsMatch(context.PropertyName);
+              return true;
             }
             else return false;
         }

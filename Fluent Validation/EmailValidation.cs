@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using EmployeeManagementAPI.Model;
-using EmployeeManagementAPI.Services;
+
 using FluentValidation;
 using FluentValidation.Validators;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
@@ -13,7 +13,7 @@ namespace EmployeeManagementAPI.Fluent_Validation
 {
     public class EmailValidation : PropertyValidator
     {
-        public EmailValidation() : base("Please enter Correct MailId")
+        public EmailValidation() : base("Enter Vaild MailId")
         {
 
         }

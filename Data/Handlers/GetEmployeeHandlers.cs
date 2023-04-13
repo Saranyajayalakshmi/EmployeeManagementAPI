@@ -1,27 +1,33 @@
 ﻿using EmployeeManagementAPI.Data.Query;
 using EmployeeManagementAPI.Model;
-using EmployeeManagementAPI.Services;
+
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagementAPI.Data.Handlers
 {
-    public class GetEmployeeHandlers : IRequestHandler<GetEmployeeByIdQuery, EmployeeManage>
-    {
-        private readonly IEmployeeRepository _employeeRepository;
+    /// <summary>
+    /// Getting EmployeeManagement Details by EmployeeId
+    /// </summary>
 
-        public GetEmployeeHandlers(IEmployeeRepository employeeRepository)
+    public class GetEmployeeHandlers : IRequestHandler<GetEmployeeByIdQuery, EmployeeManagementApplication>
+    {
+        private readonly DataDbContext _dbContext;
+
+        public GetEmployeeHandlers(DataDbContext dbContext)
         {
-            _employeeRepository=employeeRepository;
+            _dbContext = dbContext;
         }
         /// <summary>
-        /// Request Handling Process by EmployeeId
+        /// Request Handling Process by EmployeeManageId
         /// </summary>
         /// <param name="request"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<EmployeeManage> Handle(GetEmployeeByIdQuery request, CancellationToken cancellationToken)
+        public async Task<EmployeeManagementApplication> Handle(GetEmployeeByIdQuery request, CancellationToken cancellationToken)
         {
-            return await _employeeRepository.GetEmployeeManageByIdAsync(request.Id);
+            var EmployeeIdresult = await _dbContext.managementApplications.Where(x => x.EmployeeID==request.Id).FirstOrDefaultAsync();
+            return EmployeeIdresult; 
         }
     }
 }

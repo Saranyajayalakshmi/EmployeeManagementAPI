@@ -4,9 +4,10 @@ using MediatR;
 namespace EmployeeManagementAPI.Data.Query
 {
     /// <summary>
-    /// Query Employee List
+    /// Query EmployeeManagement Record
     /// </summary>
-    public class GetEmployeeListQuery : IRequest<List<EmployeeManage>>
+    public class GetEmployeeListQuery : IRequest<List<EmployeeManagementApplication>>
     {
     }
+
 }

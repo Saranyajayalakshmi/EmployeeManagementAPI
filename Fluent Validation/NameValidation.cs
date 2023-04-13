@@ -6,7 +6,7 @@ namespace EmployeeManagementAPI.Fluent_Validation
 {
     public class NameValidation : PropertyValidator
     {
-        public NameValidation() : base("Check the Name")
+        public NameValidation() : base("Enter Name")
         {
         }
 
