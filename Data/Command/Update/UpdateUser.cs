@@ -1,7 +1,13 @@
-﻿using EmployeeManagementAPI.Model;
+﻿using EmployeeManagementAPI.ExceptionHandling;
+using EmployeeManagementAPI.Model;
 
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using System;
 using System.ComponentModel.DataAnnotations;
+using System.Net.Http;
+using System.Runtime.Intrinsics.X86;
+using static EmployeeManagementAPI.ExceptionHandling.UpdateException;
 
 namespace EmployeeManagementAPI.Data.Command.Update
 {
@@ -10,6 +16,16 @@ namespace EmployeeManagementAPI.Data.Command.Update
     /// </summary>
     public class UpdateUser : IRequest<ResultResponse>
     {
+        /// <summary>
+        /// Update the Employee Records
+        /// </summary>
+        /// <param name="employeeID"></param>
+        /// <param name="employeeName"></param>
+        /// <param name="employeeEmailId"></param>
+        /// <param name="employeeMobileNumber"></param>
+        /// <param name="employeeAddress"></param>
+        /// <param name="employeeMaritalStatus"></param>
+        /// <param name="employeeDateOfJoining"></param>
         public UpdateUser(int employeeID, string employeeName, string employeeEmailId, string employeeMobileNumber, string employeeAddress, string employeeMaritalStatus, DateTime employeeDateOfJoining)
         {
             EmployeeID=employeeID;
@@ -36,34 +52,54 @@ namespace EmployeeManagementAPI.Data.Command.Update
     {
         private readonly DataDbContext _dbContext;
 
+        /// <summary>
+        /// Database connection for UpdateEmployee
+        /// </summary>
+        /// <param name="dbContext"></param>
         public UpdateEmployeeHandler(DataDbContext dbContext)
         {
             _dbContext = dbContext;
         }
-
+        /// <summary>
+        ///Handle the request and update the EmployeeDetails by EmployeeId
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>It occures changes in the EmployeeDetails </returns>
+        /// <exception cref="Exception"></exception>
         public async Task<ResultResponse> Handle(UpdateUser request, CancellationToken cancellationToken)
         {
-            var result = _dbContext.managementApplications.Where(x => x.EmployeeID==request.EmployeeID).FirstOrDefault();
             ResultResponse Result = new();
 
-            if (result != null)
+            try
             {
-                result.EmployeeName = request.EmployeeName;
-                result.EmployeeEmailId= request.EmployeeEmailId;
-                result.EmployeeMobileNumber = request.EmployeeMobileNumber;
-                result.EmployeeAddress = request.EmployeeAddress;
-                result.EmployeeMaritalStatus = request.EmployeeMaritalStatus;
-                result.EmployeeDateOfJoining = request.EmployeeDateOfJoining;
-                _dbContext.managementApplications.Update(result);
-                _dbContext.SaveChanges();
-                Result.id= request.EmployeeID;
-                Result.additionalInfo="EmployeeManagementDetails Updated";
-                return Result;
+                var result = _dbContext.managementApplications.Where(x => x.EmployeeID==request.EmployeeID).FirstOrDefault();
+
+                if (result != null)
+                {
+                    result.EmployeeName = request.EmployeeName;
+                    result.EmployeeEmailId= request.EmployeeEmailId;
+                    result.EmployeeMobileNumber = request.EmployeeMobileNumber;
+                    result.EmployeeAddress = request.EmployeeAddress;
+                    result.EmployeeMaritalStatus = request.EmployeeMaritalStatus;
+                    result.EmployeeDateOfJoining = request.EmployeeDateOfJoining;
+                    _dbContext.managementApplications.Update(result);
+                    _dbContext.SaveChanges();
+                    Result.id= request.EmployeeID;
+                    Result.additionalInfo="EmployeeDetails Updated";
+                    return Result;
+                }
+                else
+                {
+                    throw new Exception();
+                }
+
             }
-            else
+            catch (Exception ex)
             {
-                throw new Exception();
+                throw new EmployeeBadRequestException();
             }
+
 
 
 

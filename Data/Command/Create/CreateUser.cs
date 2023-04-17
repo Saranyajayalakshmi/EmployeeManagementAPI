@@ -1,10 +1,11 @@
 ﻿using EmployeeManagementAPI.Data.Command;
+using EmployeeManagementAPI.ExceptionHandling;
 using EmployeeManagementAPI.Model;
-
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Numerics;
+using static EmployeeManagementAPI.ExceptionHandling.UpdateException;
 
 namespace EmployeeManagementAPI.Data.Command.Create
 {
@@ -13,6 +14,15 @@ namespace EmployeeManagementAPI.Data.Command.Create
     /// </summary>
     public class CreateUser : IRequest<ResultResponse>
     {
+        /// <summary>
+        /// Adding Employee Record List
+        /// </summary>
+        /// <param name="employeeName"></param>
+        /// <param name="employeeEmailId"></param>
+        /// <param name="employeeMobileNumber"></param>
+        /// <param name="employeeAddress"></param>
+        /// <param name="employeeMaritalStatus"></param>
+        /// <param name="employeeDateOfJoining"></param>
         public CreateUser(string employeeName, string employeeEmailId, string employeeMobileNumber, string employeeAddress, string employeeMaritalStatus, DateTime employeeDateOfJoining)
         {
 
@@ -32,10 +42,6 @@ namespace EmployeeManagementAPI.Data.Command.Create
         public DateTime EmployeeDateOfJoining { get; set; }
     }
 
-    /// <summary>
-    /// CreateUser Handler Process
-    /// </summary>
-
 
     public class CreateEmployeeHandler : IRequestHandler<CreateUser, ResultResponse>
     {
@@ -45,6 +51,13 @@ namespace EmployeeManagementAPI.Data.Command.Create
         {
             _dbContext = dbContext;
         }
+        /// <summary>
+        /// Handle the request and Add the EmployeeDetails
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>Add the EmployeeDetails in tables</returns>
+        /// <exception cref="ArgumentException"></exception>
 
         public async Task<ResultResponse> Handle(CreateUser request, CancellationToken cancellationToken)
         {
@@ -58,9 +71,10 @@ namespace EmployeeManagementAPI.Data.Command.Create
 
                 IList<EmployeeManagementApplication> Items = new List<EmployeeManagementApplication>();
 
-                var query = from s in _dbContext.managementApplications select s;
+                var query = from s in _dbContext.managementApplications select s; //stores data in s
                 var listdata = query.ToList();
 
+                // list the Data
                 foreach (var item in listdata)
                 {
                     Items.Add(new EmployeeManagementApplication());
@@ -82,15 +96,15 @@ namespace EmployeeManagementAPI.Data.Command.Create
                     if (EmployeeDetails != null)
                     {
                         result.id = EmployeeDetails.EmployeeID;
-                        result.additionalInfo = "EmployeeManagement Details Added";
+                        result.additionalInfo = "Added";
                     }
                     return result;
                 }
 
             }
-            catch (Exception)
+            catch (Exception ex) // throws an error
             {
-                throw new ArgumentException("EmployeeDetails Not Added");
+                throw new EmployeeNotFoundException();
                 //result.additionalInfo="Failed To Added";
             }
             return result;

@@ -4,7 +4,7 @@ namespace EmployeeManagementAPI.Fluent_Validation
 {
     public class MaritalStatusValidation : PropertyValidator
     {
-        public MaritalStatusValidation() : base("must fill")
+        public MaritalStatusValidation() : base("Invaild")
         {
         }
 
@@ -12,6 +12,7 @@ namespace EmployeeManagementAPI.Fluent_Validation
         {
             
           return context.PropertyValue is (object)"Married" or (object)"Single";
+          
             
         }
     }

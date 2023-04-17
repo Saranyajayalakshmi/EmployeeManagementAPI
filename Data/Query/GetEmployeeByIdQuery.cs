@@ -8,7 +8,7 @@ namespace EmployeeManagementAPI.Data.Query
     /// </summary>
     public class GetEmployeeByIdQuery : IRequest<EmployeeManagementApplication>
     {
-        public int Id { get; set; }
+        public int Id { get; set; }//Id Property
     }
 
 

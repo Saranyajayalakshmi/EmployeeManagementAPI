@@ -9,7 +9,9 @@ using System;
 using EmployeeManagementAPI.Fluent_Validation;
 using EmployeeManagementAPI.Model;
 using EmployeeManagementAPI.Behaviour;
-
+using EmployeeManagementAPI.ExceptionHandling;
+using Microsoft.Extensions.DependencyInjection;
+using EmployeeManagementAPI.ErrorManagement;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,12 +44,16 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+    app.UseExceptionHandler("/nError");
 
+}
+app.AddGlobalErrorHandler();
+app.UseStatusCodePages();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

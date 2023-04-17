@@ -6,8 +6,12 @@ using EmployeeManagementAPI.Fluent_Validation;
 
 namespace EmployeeManagementAPI.Data.Command.Update
 {
+    /// <summary>
+    /// UpdateUser Validation by SetValidator
+    /// </summary>
     public class UpdateUserValidation : AbstractValidator<UpdateUser>
     {
+        //SetValidator for EmployeeName,EmailId,MaritalStatus,mobileNumber
         public UpdateUserValidation()
         {
             RuleFor(m => m.EmployeeName).NotEmpty().SetValidator(new NameValidation());

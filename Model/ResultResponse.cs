@@ -2,10 +2,10 @@
 {
     public class ResultResponse
     {
-        public int id { get; set; }
         /// <summary>
-        /// 
+        /// Stores the Result in Model
         /// </summary>
-        public string? additionalInfo { get; set; }
+        public int id { get; set; }
+        public string additionalInfo { get; set; }
     }
 }

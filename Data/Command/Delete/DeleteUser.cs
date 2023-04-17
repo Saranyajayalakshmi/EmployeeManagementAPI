@@ -6,7 +6,7 @@ using MediatR;
 namespace EmployeeManagementAPI.Data.Command.Delete
 {
     /// <summary>
-    /// DeleteUser
+    /// DeleteUser by EmployeeId
     /// </summary>
     public class DeleteUser : IRequest<ResultResponse>
     {
@@ -25,6 +25,12 @@ namespace EmployeeManagementAPI.Data.Command.Delete
         {
             _dbContext = dataContext;
         }
+        /// <summary>
+        /// Delete Employee Details by EmployeeId
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>If EmployeeId is null or not exists returns InvalidId</returns>
 
         public async Task<ResultResponse> Handle(DeleteUser request, CancellationToken cancellationToken)
         {
@@ -36,7 +42,7 @@ namespace EmployeeManagementAPI.Data.Command.Delete
                 _dbContext.managementApplications.Remove(result);
                var value= await _dbContext.SaveChangesAsync();
                 Entity.id=value;
-                Entity.additionalInfo="EmployeeDetails Deleted";
+                Entity.additionalInfo="1 Row Affected";
 
                 return Entity;
             }

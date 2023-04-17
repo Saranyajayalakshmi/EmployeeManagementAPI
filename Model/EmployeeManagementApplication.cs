@@ -2,23 +2,29 @@
 
 namespace EmployeeManagementAPI.Model
 {
+    /// <summary>
+    /// EmployeeManagement Properties
+    /// </summary>
     public class EmployeeManagementApplication : IValidatableObject
     {
         [Key]
         public int EmployeeID { get; set; }
         public string EmployeeName { get; set; }
         public string EmployeeEmailId { get; set; }
-        [EmailAddress]
         public string EmployeeMobileNumber { get; set; }
         public string EmployeeAddress { get; set; }
         public string EmployeeMaritalStatus { get; set; }
         public DateTime EmployeeDateOfJoining { get; set; }
 
+        /// <summary>
+        /// Validate for DateOfJoining
+        /// </summary>
+        /// <param name="validationContext"></param>
+        /// <returns></returns>
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-         if(EmployeeDateOfJoining == DateTime.MinValue) { yield break; }
+            if (EmployeeDateOfJoining == DateTime.MinValue) { yield break; }
         }
 
-      
     }
 }
