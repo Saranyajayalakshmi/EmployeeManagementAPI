@@ -1,6 +1,5 @@
 ﻿using EmployeeManagementAPI.Data.Query;
 using EmployeeManagementAPI.Model;
-
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

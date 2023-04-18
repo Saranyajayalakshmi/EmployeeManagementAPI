@@ -1,9 +1,10 @@
-﻿using static EmployeeManagementAPI.ExceptionHandling.UpdateException;
-using System.Net;
+﻿using System.Net;
 using System.Text.Json;
+using static EmployeeManagementAPI.ExceptionHandling.UpdateException;
 
 namespace EmployeeManagementAPI.ErrorManagement
 {
+    // Creating Global Middlware Error with Handling process
     public class GlobalErrorHandlingMiddleware
     {
         private readonly RequestDelegate _next;
@@ -23,6 +24,7 @@ namespace EmployeeManagementAPI.ErrorManagement
                 await HandleExceptionAsync(context, ex);
             }
         }
+        // with Http Statuscode, Exception Error
         private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             HttpStatusCode status;
@@ -34,20 +36,28 @@ namespace EmployeeManagementAPI.ErrorManagement
             if (exceptionType == typeof(EmployeeBadRequestException))
             {
                 message = exception.Message;
+              //  message=exception.InnerException;
                 status = HttpStatusCode.BadRequest;
-                //stackTrace = exception.StackTrace;
+                stackTrace = exception.StackTrace;
             }
             else if (exceptionType == typeof(EmployeeNotFoundException))
             {
                 message = exception.Message;
                 status = HttpStatusCode.NotFound;
                 //stackTrace = exception.StackTrace;
-            }else
+            }
+            else if (exceptionType == typeof(IdNotFoundException))
+            {
+                status = HttpStatusCode.Unauthorized;
+                message = exception.Message;
+                stackTrace = exception.StackTrace;
+            }
+            else
             {
                 message = exception.Message;
                 status = HttpStatusCode.InternalServerError;
             }
-            var exceptionResult = JsonSerializer.Serialize(new { Error = message });
+            var exceptionResult = JsonSerializer.Serialize(new { ErrorMessage = message });
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)status;
 

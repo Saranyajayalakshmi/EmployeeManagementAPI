@@ -1,9 +1,6 @@
-﻿using EmployeeManagementAPI.Data;
-using EmployeeManagementAPI.Data.Command;
-using EmployeeManagementAPI.Data.Command.Create;
+﻿using EmployeeManagementAPI.Data.Command.Create;
 using EmployeeManagementAPI.Data.Command.Delete;
 using EmployeeManagementAPI.Data.Command.Update;
-using EmployeeManagementAPI.Data.Handlers;
 using EmployeeManagementAPI.Data.Query;
 using EmployeeManagementAPI.Model;
 using MediatR;
@@ -26,18 +23,14 @@ namespace EmployeeManagementAPI.Controllers
         /// </summary>
         /// <param name="mediator"></param>
         /// 
-        //private ILogger _logger;
-        //public EmployeeManageController(ILogger logger)
-        //{
-        //    _logger = logger;
-        //}
+      
 
         public EmployeeManageController(IMediator mediator)
         {
             _mediator=mediator;
         }
         /// <summary>
-        /// Getting EmployeeManagementList by using Query & Request Handler
+        /// Get EmployeeList by EmployeeId
         /// </summary>
         /// <returns> Gives EmployeeManagement List Details</returns>
         // GET: api/<EmployeeManageController>
@@ -51,7 +44,7 @@ namespace EmployeeManagementAPI.Controllers
 
 
         /// <summary>
-        /// Getting EmployeeDetails with EmployeeId using RequestHandler
+        /// Getting EmployeeDetails by EmployeeId
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -67,7 +60,7 @@ namespace EmployeeManagementAPI.Controllers
         }
 
         /// <summary>
-        /// Adding EmployeeDetails
+        /// Create List of Users with input
         /// </summary>
         /// <param name="addEmployee"></param>
         /// <returns> Add the Employee Details and save in database Table  </returns>
@@ -85,6 +78,7 @@ namespace EmployeeManagementAPI.Controllers
             else
             {
                 var result = await _mediator.Send(addEmployee);
+                return Ok(result);
                 //addEmployee.EmployeeName,
                 //addEmployee.EmployeeEmailId,
                 //addEmployee.EmployeeMobileNumber,
@@ -93,19 +87,18 @@ namespace EmployeeManagementAPI.Controllers
                 //addEmployee.EmployeeDateOfJoining
                 //));
 
-                return Ok(result);
+
             }
         }
 
         /// <summary>
-        /// Updating EmployeeManagementDetails Check with null values
+        /// Updating Employee Details 
         /// </summary>
         /// <param name="updateEmployee"></param>
         /// <returns> Check with EmployeeId and Update the Details in table</returns>
 
         // PUT api/<EmployeeManageController>/5
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UpdateEmployeeDetails(UpdateUser updateEmployee)
         {
             //EmployeeId is 0 or null throws StatusError
@@ -116,6 +109,7 @@ namespace EmployeeManagementAPI.Controllers
             else
             {
                 var ValueReturn = await _mediator.Send(updateEmployee);
+                return Ok(ValueReturn);
                 //(updateEmployee.EmployeeID,
                 //updateEmployee.EmployeeName,
                 //updateEmployee.EmployeeEmailId,
@@ -123,7 +117,7 @@ namespace EmployeeManagementAPI.Controllers
                 //updateEmployee.EmployeeAddress,
                 //updateEmployee.EmployeeMaritalStatus,
                 //updateEmployee.EmployeeDateOfJoining));
-                return Ok(ValueReturn);
+
             }
 
         }
@@ -138,9 +132,8 @@ namespace EmployeeManagementAPI.Controllers
         // DELETE api/<EmployeeManageController>/5
         [HttpDelete("{id}")]
 
-        public Task<ResultResponse> DeleteEmployeeDetails(DeleteUser deleteUser)
+        public Task<ResultValue> DeleteEmployeeDetails(DeleteUser deleteUser)
         {
-
             var result = _mediator.Send(new DeleteUser() { EmployeeId=deleteUser.EmployeeId });//By EmployeeId from deleteuser
             return result;
         }

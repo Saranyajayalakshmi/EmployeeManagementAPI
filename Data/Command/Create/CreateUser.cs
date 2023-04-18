@@ -10,19 +10,12 @@ using static EmployeeManagementAPI.ExceptionHandling.UpdateException;
 namespace EmployeeManagementAPI.Data.Command.Create
 {
     /// <summary>
-    /// Creating Request For CreateUser
+    /// Create User
     /// </summary>
-    public class CreateUser : IRequest<ResultResponse>
+    public class CreateUser : IRequest<ResultValue>
     {
-        /// <summary>
-        /// Adding Employee Record List
-        /// </summary>
-        /// <param name="employeeName"></param>
-        /// <param name="employeeEmailId"></param>
-        /// <param name="employeeMobileNumber"></param>
-        /// <param name="employeeAddress"></param>
-        /// <param name="employeeMaritalStatus"></param>
-        /// <param name="employeeDateOfJoining"></param>
+
+        //Properties to Create user
         public CreateUser(string employeeName, string employeeEmailId, string employeeMobileNumber, string employeeAddress, string employeeMaritalStatus, DateTime employeeDateOfJoining)
         {
 
@@ -43,27 +36,25 @@ namespace EmployeeManagementAPI.Data.Command.Create
     }
 
 
-    public class CreateEmployeeHandler : IRequestHandler<CreateUser, ResultResponse>
+    public class CreateEmployeeHandler : IRequestHandler<CreateUser, ResultValue>
     {
         private readonly DataDbContext _dbContext;
+      
 
         public CreateEmployeeHandler(DataDbContext dbContext)
         {
             _dbContext = dbContext;
+            
         }
-        /// <summary>
-        /// Handle the request and Add the EmployeeDetails
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns>Add the EmployeeDetails in tables</returns>
-        /// <exception cref="ArgumentException"></exception>
 
-        public async Task<ResultResponse> Handle(CreateUser request, CancellationToken cancellationToken)
+        
+        //Add the EmployeeDetails in tables
+
+        public async Task<ResultValue> Handle(CreateUser request, CancellationToken cancellationToken)
         {
-            ResultResponse result = new ResultResponse();
+            ResultValue result = new ResultValue();
 
-            try
+            try 
             {
                 var EmployeeDetails = new EmployeeManagementApplication();
 
@@ -102,7 +93,7 @@ namespace EmployeeManagementAPI.Data.Command.Create
                 }
 
             }
-            catch (Exception ex) // throws an error
+            catch (Exception) // throws an NotFounferror
             {
                 throw new EmployeeNotFoundException();
                 //result.additionalInfo="Failed To Added";

@@ -1,5 +1,4 @@
 using EmployeeManagementAPI.Data;
-
 using Microsoft.EntityFrameworkCore;
 using MediatR;
 using System.Reflection;
@@ -12,6 +11,8 @@ using EmployeeManagementAPI.Behaviour;
 using EmployeeManagementAPI.ExceptionHandling;
 using Microsoft.Extensions.DependencyInjection;
 using EmployeeManagementAPI.ErrorManagement;
+using Serilog;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,10 @@ builder.Services.AddControllers();
 builder.Services.AddValidatorsFromAssembly(typeof(DataDbContext).Assembly);
 builder.Services.AddSingleton(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
+var logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).Enrich.FromLogContext().CreateLogger();
+
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(logger);
 
 
 
@@ -39,8 +44,12 @@ builder.Services.AddSingleton(typeof(IPipelineBehavior<,>), typeof(ValidationBeh
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
+builder.Services.AddSwaggerGen(c => {
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+});
+builder.Services.AddApiVersioningConfigured();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -48,15 +57,25 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
+    var descriptionProvider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+    app.UseSwaggerUI(options =>
+    {
+        // Build a swagger endpoint for each discovered API version
+        foreach (var description in descriptionProvider.ApiVersionDescriptions)
+        {
+            options.SwaggerEndpoint($"{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
+        }
+    });
     app.UseSwaggerUI();
-    app.UseExceptionHandler("/nError");
+   // app.UseExceptionHandler("/nError");
 
 }
 app.AddGlobalErrorHandler();
-app.UseStatusCodePages();
+//app.UseStatusCodePages();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
 
 app.MapControllers();
 

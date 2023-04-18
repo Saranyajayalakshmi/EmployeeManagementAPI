@@ -1,5 +1,4 @@
-﻿using FluentValidation.Resources;
-using FluentValidation.Validators;
+﻿using FluentValidation.Validators;
 using System.Text.RegularExpressions;
 
 namespace EmployeeManagementAPI.Fluent_Validation
@@ -19,15 +18,9 @@ namespace EmployeeManagementAPI.Fluent_Validation
         /// <returns></returns>
         protected override bool IsValid(PropertyValidatorContext context)
         {
-            Regex regex = new Regex(@"^[a-zA-Z''-'\s]{1,40}$", RegexOptions.IgnoreCase);
-            if (context.PropertyValue != null)
-            {
-                return regex.IsMatch((string)context.PropertyValue);
-            }
-            else
-            {
-                return false;
-            }
+           Regex regex = new Regex(@"^[a-zA-Z''-'\s]{1,40}$", RegexOptions.IgnoreCase);
+           return regex.IsMatch((string)context.PropertyValue);
+            
         }
     }
 }

@@ -1,24 +1,24 @@
-﻿using EmployeeManagementAPI.Model;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Net;
-using System.Runtime.Serialization;
-
-namespace EmployeeManagementAPI.ExceptionHandling
+﻿namespace EmployeeManagementAPI.ExceptionHandling
 {
-    /// <summary>
-    /// Exception for updateuser Employee
-    /// </summary>
+
+    // Exception for updateuser Employee
+
     public class UpdateException
     {
         public class EmployeeBadRequestException : Exception
         {
             public EmployeeBadRequestException() : base(message:"BadRequest")
             { }
+
         }
         public class EmployeeNotFoundException : Exception
         {
-            public EmployeeNotFoundException() : base(message:"NotFound")
+            public EmployeeNotFoundException() : base(message:"Employee Record Not Found")
+            { }
+        }
+        public class IdNotFoundException : Exception
+        {
+            public IdNotFoundException() : base(message:"EmployeeId NotFound")
             { }
         }
 

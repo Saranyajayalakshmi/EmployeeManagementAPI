@@ -1,56 +1,62 @@
-﻿using EmployeeManagementAPI.Controllers;
-using EmployeeManagementAPI.Model;
-
+﻿using EmployeeManagementAPI.Model;
 using MediatR;
+using static EmployeeManagementAPI.ExceptionHandling.UpdateException;
 
 namespace EmployeeManagementAPI.Data.Command.Delete
 {
-    /// <summary>
-    /// DeleteUser by EmployeeId
-    /// </summary>
-    public class DeleteUser : IRequest<ResultResponse>
+
+    // DeleteUser by EmployeeId
+
+    public class DeleteUser : IRequest<ResultValue>
     {
         public int EmployeeId { get; set; }
     }
 
-    /// <summary>
-    /// Delete Reuest & Handler
-    /// </summary>
+    
+    // Delete Request & Handler
+  
 
-    public class DeleteEmployeeHandler : IRequestHandler<DeleteUser, ResultResponse>
+    public class DeleteEmployeeHandler : IRequestHandler<DeleteUser, ResultValue>
     {
         private readonly DataDbContext _dbContext;
+        
 
         public DeleteEmployeeHandler(DataDbContext dataContext)
         {
             _dbContext = dataContext;
+            
         }
-        /// <summary>
-        /// Delete Employee Details by EmployeeId
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns>If EmployeeId is null or not exists returns InvalidId</returns>
-
-        public async Task<ResultResponse> Handle(DeleteUser request, CancellationToken cancellationToken)
+        
+        // Delete EmployeeDetails by EmployeeId
+        
+        public async Task<ResultValue> Handle(DeleteUser request, CancellationToken cancellationToken)
         {
-            var result = _dbContext.managementApplications.Where(x => x.EmployeeID==request.EmployeeId).FirstOrDefault();
-            ResultResponse Entity = new();
-            // If EmployeeId is Invalid returns null
-            if (result != null)
-            {
-                _dbContext.managementApplications.Remove(result);
-               var value= await _dbContext.SaveChangesAsync();
-                Entity.id=value;
-                Entity.additionalInfo="1 Row Affected";
+            ResultValue Entity = new();
 
-                return Entity;
-            }
-            else
+            var result = _dbContext.managementApplications.Where(x => x.EmployeeID==request.EmployeeId).FirstOrDefault();
+            try
             {
-                Entity.id=0;
-                Entity.additionalInfo="InvalidEmployeeId";
-                return Entity;
+                
+
+                // If EmployeeId is Invalid returns null
+                if (result != null)
+                {
+                    _dbContext.managementApplications.Remove(result);
+                    var value = await _dbContext.SaveChangesAsync();
+                    Entity.id=value;
+                    Entity.additionalInfo="1 Row Affected";
+                    return Entity;
+                }
+                else
+                {
+                    Entity.additionalInfo="0 Rows Affected";
+                    
+                    throw new Exception();
+                }
+            }
+            catch(Exception) 
+            {
+                throw new EmployeeBadRequestException();
             }
         }
     }

@@ -1,6 +1,4 @@
 ﻿using FluentValidation.Validators;
-using System.Numerics;
-using System.Text.RegularExpressions;
 
 namespace EmployeeManagementAPI.Fluent_Validation
 {
@@ -12,20 +10,16 @@ namespace EmployeeManagementAPI.Fluent_Validation
         public MobileNumberValidation() : base("Invaild")
         {
         }
-        /// <summary>
-        /// validation by Length of Mobilenumber
-        /// </summary>
-        /// <param name="context"></param>
-        /// <returns></returns>
+        
+        // validation by Length of MobileNumber
+      
         protected override bool IsValid(PropertyValidatorContext context)
         {
-           var data = context.PropertyValue.ToString();
-            if (data.Length>= 9)
-            {
-                
+           var phonenumber = context.PropertyValue.ToString();
+            if (phonenumber.Length<= 9)
               return true;
-            }
-            else return false;
+            else 
+                return false;
         }
     }
 }

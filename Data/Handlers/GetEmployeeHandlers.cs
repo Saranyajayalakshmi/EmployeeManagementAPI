@@ -1,6 +1,5 @@
 ﻿using EmployeeManagementAPI.Data.Query;
 using EmployeeManagementAPI.Model;
-
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,9 +30,9 @@ namespace EmployeeManagementAPI.Data.Handlers
         /// <returns></returns>
       
         //EmployeeDetails by using EmployeeID
-        public async Task<EmployeeManagementApplication> Handle(GetEmployeeByIdQuery request, CancellationToken cancellationToken)
+        public  Task<EmployeeManagementApplication> Handle(GetEmployeeByIdQuery request, CancellationToken cancellationToken)
         {
-            var EmployeeIdresult = await _dbContext.managementApplications.Where(x => x.EmployeeID==request.Id).FirstOrDefaultAsync();
+            var EmployeeIdresult = _dbContext.managementApplications.Where(x => x.EmployeeID==request.Id).FirstOrDefaultAsync();
             return EmployeeIdresult; 
         }
     }
