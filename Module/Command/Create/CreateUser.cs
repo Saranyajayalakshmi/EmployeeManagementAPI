@@ -14,6 +14,9 @@ namespace EmployeeManagementAPI.Data.Command.Create
     /// </summary>
     public class CreateUser : IRequest<ResultValue>
     {
+        public CreateUser()
+        {
+        }
 
         //Properties to Create user
         public CreateUser(string employeeName, string employeeEmailId, string employeeMobileNumber, string employeeAddress, string employeeMaritalStatus, DateTime employeeDateOfJoining)
@@ -38,7 +41,7 @@ namespace EmployeeManagementAPI.Data.Command.Create
 
     public class CreateEmployeeHandler : IRequestHandler<CreateUser, ResultValue>
     {
-        private readonly DataDbContext _dbContext;
+         DataDbContext _dbContext;
       
 
         public CreateEmployeeHandler(DataDbContext dbContext)
@@ -54,22 +57,11 @@ namespace EmployeeManagementAPI.Data.Command.Create
         {
             ResultValue result = new ResultValue();
 
+            var EmployeeDetails = new EmployeeManagementApplication();
+
             try 
             {
-                var EmployeeDetails = new EmployeeManagementApplication();
-
-                //assignining values to Employeetables using LINQ
-
-                IList<EmployeeManagementApplication> Items = new List<EmployeeManagementApplication>();
-
-                var query = from s in _dbContext.managementApplications select s; //stores data in s
-                var listdata = query.ToList();
-
-                // list the Data
-                foreach (var item in listdata)
-                {
-                    Items.Add(new EmployeeManagementApplication());
-                    {
+                     //assignining values to Employeetables
 
                         EmployeeDetails.EmployeeName = request.EmployeeName;
                         EmployeeDetails.EmployeeEmailId = request.EmployeeEmailId;
@@ -80,7 +72,7 @@ namespace EmployeeManagementAPI.Data.Command.Create
 
                         _dbContext.managementApplications.Add(EmployeeDetails);
                         await _dbContext.SaveChangesAsync();
-                    }
+                   // }
 
                     //Employee Details not null Add table to database
 
@@ -88,14 +80,15 @@ namespace EmployeeManagementAPI.Data.Command.Create
                     {
                         result.id = EmployeeDetails.EmployeeID;
                         result.additionalInfo = "Added";
-                    }
                     return result;
                 }
+                    
+                //}
 
             }
             catch (Exception) // throws an NotFounferror
             {
-                throw new EmployeeNotFoundException();
+                //throw new EmployeeNotFoundException();
                 //result.additionalInfo="Failed To Added";
             }
             return result;

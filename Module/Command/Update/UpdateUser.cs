@@ -9,8 +9,11 @@ namespace EmployeeManagementAPI.Data.Command.Update
     /// </summary>
     public class UpdateUser : IRequest<ResultValue>
     {
-  
-       //Properties to update user
+        public UpdateUser()
+        {
+        }
+
+        //Properties to update user
         public UpdateUser(int employeeID, string employeeName, string employeeEmailId, string employeeMobileNumber, string employeeAddress, string employeeMaritalStatus, DateTime employeeDateOfJoining)
         {
             EmployeeID=employeeID;

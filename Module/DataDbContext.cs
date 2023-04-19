@@ -5,12 +5,12 @@ namespace EmployeeManagementAPI.Data
 {
     public class DataDbContext : DbContext
     {
-        public DataDbContext(DbContextOptions options) : base(options)
+        public DataDbContext(DbContextOptions<DataDbContext> options) : base(options)
         {
         }
         /// <summary>
         /// DatabaseSet for EmployeeManagementApplication class
         /// </summary>
-        public DbSet<EmployeeManagementApplication> managementApplications { get; set; }
+        public virtual DbSet<EmployeeManagementApplication> managementApplications { get; set; }
     }
 }

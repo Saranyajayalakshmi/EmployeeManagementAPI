@@ -15,7 +15,8 @@ namespace EmployeeManagementAPI.Data.Command.Update
             RuleFor(m => m.EmployeeAddress).NotNull().NotEmpty();
             RuleFor(m => m.EmployeeMaritalStatus).NotNull().NotEmpty().SetValidator(new MaritalStatusValidation());
             RuleFor(m => m.EmployeeEmailId).NotNull().SetValidator(new EmailValidation());
-            RuleFor(m => m.EmployeeMobileNumber).NotNull().SetValidator(new MobileNumberValidation());
+            RuleFor(m => m.EmployeeMobileNumber).NotNull().NotEmpty().SetValidator(new MobileNumberValidation());
+            RuleFor(m => m.EmployeeDateOfJoining).NotNull().NotEmpty();
 
         }
     }

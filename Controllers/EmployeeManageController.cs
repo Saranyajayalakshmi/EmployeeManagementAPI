@@ -2,6 +2,7 @@
 using EmployeeManagementAPI.Data.Command.Delete;
 using EmployeeManagementAPI.Data.Command.Update;
 using EmployeeManagementAPI.Data.Query;
+using EmployeeManagementAPI.LogError;
 using EmployeeManagementAPI.Model;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@ namespace EmployeeManagementAPI.Controllers
     public class EmployeeManageController : ControllerBase
     {
         private IMediator _mediator;
+        private ILoggerService _logger;
         /// <summary>
         /// Creating Mediator for EmployeeManagement Controller 
         /// </summary>
@@ -25,9 +27,10 @@ namespace EmployeeManagementAPI.Controllers
         /// 
       
 
-        public EmployeeManageController(IMediator mediator)
+        public EmployeeManageController(IMediator mediator, ILoggerService loggerService)
         {
             _mediator=mediator;
+            _logger=loggerService;
         }
         /// <summary>
         /// Get EmployeeList by EmployeeId
@@ -77,8 +80,11 @@ namespace EmployeeManagementAPI.Controllers
             }
             else
             {
+               
                 var result = await _mediator.Send(addEmployee);
+                _logger.LogInfo("EmployeeAdded");
                 return Ok(result);
+
                 //addEmployee.EmployeeName,
                 //addEmployee.EmployeeEmailId,
                 //addEmployee.EmployeeMobileNumber,

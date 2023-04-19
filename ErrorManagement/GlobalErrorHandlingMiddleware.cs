@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using EmployeeManagementAPI.LogError;
+using System.Net;
 using System.Text.Json;
 using static EmployeeManagementAPI.ExceptionHandling.UpdateException;
 
@@ -8,10 +9,12 @@ namespace EmployeeManagementAPI.ErrorManagement
     public class GlobalErrorHandlingMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly ILoggerService _logger;
 
-        public GlobalErrorHandlingMiddleware(RequestDelegate next)
+        public GlobalErrorHandlingMiddleware(RequestDelegate next, ILoggerService loggerService)
         {
             _next = next;
+            _logger = loggerService;
         }
         public async Task Invoke(HttpContext context)
         {
@@ -21,6 +24,7 @@ namespace EmployeeManagementAPI.ErrorManagement
             }
             catch (Exception ex)
             {
+                _logger.LogError($"Something went Wrong:{ex}");
                 await HandleExceptionAsync(context, ex);
             }
         }

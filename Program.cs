@@ -13,9 +13,18 @@ using Microsoft.Extensions.DependencyInjection;
 using EmployeeManagementAPI.ErrorManagement;
 using Serilog;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using EmployeeManagementAPI.LogError;
+using NLog;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+
+
+
+    //LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
+
 
 var builder = WebApplication.CreateBuilder(args);
-
+//DataBase Configuration
 builder.Services.AddDbContext<DataDbContext>(options=>options.UseSqlServer
 (builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -31,6 +40,7 @@ builder.Services.AddControllers();
 builder.Services.AddValidatorsFromAssembly(typeof(DataDbContext).Assembly);
 builder.Services.AddSingleton(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
+builder.Services.AddSingleton<ILoggerService, LoggerService>();
 var logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).Enrich.FromLogContext().CreateLogger();
 
 builder.Logging.ClearProviders();
@@ -44,6 +54,7 @@ builder.Logging.AddSerilog(logger);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+//SwaggerDocumentation Config
 builder.Services.AddSwaggerGen(c => {
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -73,6 +84,9 @@ if (app.Environment.IsDevelopment())
 app.AddGlobalErrorHandler();
 //app.UseStatusCodePages();
 app.UseHttpsRedirection();
+
+app.UseMiddleware<GlobalErrorHandlingMiddleware>();
+
 
 app.UseAuthorization();
 

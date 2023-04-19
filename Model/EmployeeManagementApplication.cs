@@ -16,14 +16,11 @@ namespace EmployeeManagementAPI.Model
         public string EmployeeMaritalStatus { get; set; }
         public DateTime EmployeeDateOfJoining { get; set; }
 
-        /// <summary>
-        /// Validate for DateOfJoining
-        /// </summary>
-        /// <param name="validationContext"></param>
-        /// <returns></returns>
+       
+        // Validate for DateOfJoining
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (EmployeeDateOfJoining == DateTime.MinValue) { yield break; }
+            if (EmployeeDateOfJoining == DateTime.Today) { yield break; }
         }
 
     }

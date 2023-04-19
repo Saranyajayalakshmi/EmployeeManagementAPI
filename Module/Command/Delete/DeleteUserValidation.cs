@@ -10,7 +10,7 @@ namespace EmployeeManagementAPI.Data.Command.Delete
         /// </summary>
         public DeleteUserValidation()
         {
-            RuleFor(m => m.EmployeeId).NotNull().NotEmpty().OverridePropertyName("Invalid Id");
+            RuleFor(m => m.EmployeeId).NotNull().NotEmpty().WithMessage("Invalid Id");
         }
     }
 }
