@@ -2,13 +2,14 @@
 using EmployeeManagementAPI.Model;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using static EmployeeManagementAPI.ExceptionHandling.ExceptionModel;
 
 namespace EmployeeManagementAPI.Data.Handlers
 {
     /// <summary>
     /// EmployeeManagementListHandlers
     /// </summary>
-    public class GetEmployeeListHandlers : IRequestHandler<GetEmployeeListQuery,List<EmployeeManagementApplication>>
+    public class GetEmployeeByList : IRequestHandler<GetEmployeeListQuery,List<EmployeeManagementApplication>>
     {
 
         private readonly DataDbContext _dbContext;
@@ -18,7 +19,7 @@ namespace EmployeeManagementAPI.Data.Handlers
        /// </summary>
        /// <param name="dbContext"></param>
 
-        public GetEmployeeListHandlers(DataDbContext dbContext)
+        public GetEmployeeByList(DataDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -33,7 +34,19 @@ namespace EmployeeManagementAPI.Data.Handlers
         public async Task<List<EmployeeManagementApplication>> Handle(GetEmployeeListQuery request, CancellationToken cancellationToken)
         {
             var emp = await _dbContext.managementApplications.ToListAsync();//To Show List Of EmployeeDetails
-            return emp;
+            if (emp.Count != 0)
+            {
+                return emp;
+            }
+            else if(emp.Count == 0) 
+            {
+                throw new EmployeeBadRequestException();
+
+            }
+            else
+            {
+                throw new Exception();
+            }
         }
     }
 }

@@ -3,7 +3,7 @@
 
     // Exception for updateuser Employee
 
-    public class UpdateException
+    public class ExceptionModel
     {
         public class EmployeeBadRequestException : Exception
         {

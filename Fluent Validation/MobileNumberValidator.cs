@@ -5,9 +5,9 @@ namespace EmployeeManagementAPI.Fluent_Validation
     /// <summary>
     /// Validation for MobileNumber
     /// </summary>
-    public class MobileNumberValidation : PropertyValidator
+    public class MobileNumberValidator : PropertyValidator
     {
-        public MobileNumberValidation() : base("Invaild")
+        public MobileNumberValidator() : base("Invaild MobileNumber")
         {
         }
         

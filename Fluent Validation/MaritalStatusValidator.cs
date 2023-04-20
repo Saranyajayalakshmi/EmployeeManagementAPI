@@ -2,9 +2,9 @@
 
 namespace EmployeeManagementAPI.Fluent_Validation
 {
-    public class MaritalStatusValidation : PropertyValidator
+    public class MaritalStatusValidator : PropertyValidator
     {
-        public MaritalStatusValidation() : base("Invaild")
+        public MaritalStatusValidator() : base("Invaild MaritalStatus")
         {
         }
 

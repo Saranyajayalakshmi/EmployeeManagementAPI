@@ -1,6 +1,6 @@
 ﻿using EmployeeManagementAPI.Model;
 using MediatR;
-using static EmployeeManagementAPI.ExceptionHandling.UpdateException;
+using static EmployeeManagementAPI.ExceptionHandling.ExceptionModel;
 
 namespace EmployeeManagementAPI.Data.Command.Update
 {
@@ -53,8 +53,8 @@ namespace EmployeeManagementAPI.Data.Command.Update
         {
             ResultValue Result = new();
 
-            try // checks with EmployeeId
-            {
+             // checks with EmployeeId
+            
                 var result = _dbContext.managementApplications.Where(x => x.EmployeeID==request.EmployeeID).FirstOrDefault();
 
                 if (result != null)
@@ -67,25 +67,15 @@ namespace EmployeeManagementAPI.Data.Command.Update
                     result.EmployeeDateOfJoining = request.EmployeeDateOfJoining;
                     _dbContext.managementApplications.Update(result);
                     _dbContext.SaveChanges();
-                    Result.id= request.EmployeeID;
-                    Result.additionalInfo="EmployeeDetails Updated";
                    
+                    Result.ResponseValue= request.EmployeeID;
+                    Result.additionalInfo="EmployeeDetails Updated";
+                    return Task.FromResult(Result);
                 }
                 else
                 {
-                    throw new Exception();
+                    throw new EmployeeNotFoundException();
                 }
-
-            }
-            catch (Exception)
-            {
-                throw new EmployeeNotFoundException();
-            }
-            return Task.FromResult(Result);
-
-
-
-
-        }
+         }
     }
 }

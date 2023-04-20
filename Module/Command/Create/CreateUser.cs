@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Numerics;
-using static EmployeeManagementAPI.ExceptionHandling.UpdateException;
+using static EmployeeManagementAPI.ExceptionHandling.ExceptionModel;
 
 namespace EmployeeManagementAPI.Data.Command.Create
 {
@@ -41,16 +41,16 @@ namespace EmployeeManagementAPI.Data.Command.Create
 
     public class CreateEmployeeHandler : IRequestHandler<CreateUser, ResultValue>
     {
-         DataDbContext _dbContext;
-      
+        DataDbContext _dbContext;
+
 
         public CreateEmployeeHandler(DataDbContext dbContext)
         {
             _dbContext = dbContext;
-            
+
         }
 
-        
+
         //Add the EmployeeDetails in tables
 
         public async Task<ResultValue> Handle(CreateUser request, CancellationToken cancellationToken)
@@ -59,42 +59,36 @@ namespace EmployeeManagementAPI.Data.Command.Create
 
             var EmployeeDetails = new EmployeeManagementApplication();
 
-            try 
+
+            //assignining values to Employeetables
+
+            EmployeeDetails.EmployeeName = request.EmployeeName;
+            EmployeeDetails.EmployeeEmailId = request.EmployeeEmailId;
+            EmployeeDetails.EmployeeMobileNumber = request.EmployeeMobileNumber;
+            EmployeeDetails.EmployeeAddress = request.EmployeeAddress;
+            EmployeeDetails.EmployeeMaritalStatus = request.EmployeeMaritalStatus;
+            EmployeeDetails.EmployeeDateOfJoining = request.EmployeeDateOfJoining;
+
+            _dbContext.managementApplications.Add(EmployeeDetails);
+
+            result.ResponseValue=await _dbContext.SaveChangesAsync();
+            result.additionalInfo = "Added";
+
+
+
+            //Checks ResponseValue 
+
+            if (result.ResponseValue==0)
             {
-                     //assignining values to Employeetables
-
-                        EmployeeDetails.EmployeeName = request.EmployeeName;
-                        EmployeeDetails.EmployeeEmailId = request.EmployeeEmailId;
-                        EmployeeDetails.EmployeeMobileNumber = request.EmployeeMobileNumber;
-                        EmployeeDetails.EmployeeAddress = request.EmployeeAddress;
-                        EmployeeDetails.EmployeeMaritalStatus = request.EmployeeMaritalStatus;
-                        EmployeeDetails.EmployeeDateOfJoining = request.EmployeeDateOfJoining;
-
-                        _dbContext.managementApplications.Add(EmployeeDetails);
-                        await _dbContext.SaveChangesAsync();
-                   // }
-
-                    //Employee Details not null Add table to database
-
-                    if (EmployeeDetails != null)
-                    {
-                        result.id = EmployeeDetails.EmployeeID;
-                        result.additionalInfo = "Added";
-                    return result;
-                }
-                    
-                //}
-
-            }
-            catch (Exception) // throws an NotFounferror
-            {
-                //throw new EmployeeNotFoundException();
-                //result.additionalInfo="Failed To Added";
+                throw new EmployeeBadRequestException();
             }
             return result;
-
-
         }
+           
+            
+
+
+        
 
     }
 }

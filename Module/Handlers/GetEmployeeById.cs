@@ -2,6 +2,7 @@
 using EmployeeManagementAPI.Model;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using static EmployeeManagementAPI.ExceptionHandling.ExceptionModel;
 
 namespace EmployeeManagementAPI.Data.Handlers
 {
@@ -9,15 +10,20 @@ namespace EmployeeManagementAPI.Data.Handlers
     /// Getting EmployeeManagement Details by EmployeeId
     /// </summary>
 
-    public class GetEmployeeHandlers : IRequestHandler<GetEmployeeByIdQuery, EmployeeManagementApplication>
+    public class GetEmployeeById : IRequestHandler<GetEmployeeByIdQuery, EmployeeManagementApplication>
     {
         private readonly DataDbContext _dbContext;
+
+        public GetEmployeeById()
+        {
+        }
+
         /// <summary>
         /// DataBaseConnection for EmployeeHandlers
         /// </summary>
         /// <param name="dbContext"></param>
-       
-        public GetEmployeeHandlers(DataDbContext dbContext)
+
+        public GetEmployeeById(DataDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -33,7 +39,14 @@ namespace EmployeeManagementAPI.Data.Handlers
         public  Task<EmployeeManagementApplication> Handle(GetEmployeeByIdQuery request, CancellationToken cancellationToken)
         {
             var EmployeeIdresult = _dbContext.managementApplications.Where(x => x.EmployeeID==request.Id).FirstOrDefaultAsync();
-            return EmployeeIdresult; 
+            if (EmployeeIdresult.Result==null)
+            {
+                throw new IdNotFoundException();
+            }
+            else
+            {
+                return EmployeeIdresult;
+            }
         }
     }
 }

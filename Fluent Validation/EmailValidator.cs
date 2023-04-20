@@ -6,9 +6,9 @@ namespace EmployeeManagementAPI.Fluent_Validation
     /// <summary>
     /// Validate for Emoplyee EmailId
     /// </summary>
-    public class EmailValidation : PropertyValidator
+    public class EmailValidator : PropertyValidator
     {
-        public EmailValidation() : base("InVaild  EMailId")
+        public EmailValidator() : base("InVaild  EmailId")
         {
 
         }

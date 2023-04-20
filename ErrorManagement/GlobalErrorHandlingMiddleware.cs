@@ -1,7 +1,7 @@
 ﻿using EmployeeManagementAPI.LogError;
 using System.Net;
 using System.Text.Json;
-using static EmployeeManagementAPI.ExceptionHandling.UpdateException;
+using static EmployeeManagementAPI.ExceptionHandling.ExceptionModel;
 
 namespace EmployeeManagementAPI.ErrorManagement
 {
@@ -52,7 +52,7 @@ namespace EmployeeManagementAPI.ErrorManagement
             }
             else if (exceptionType == typeof(IdNotFoundException))
             {
-                status = HttpStatusCode.Unauthorized;
+                status = HttpStatusCode.NotFound;
                 message = exception.Message;
                 stackTrace = exception.StackTrace;
             }

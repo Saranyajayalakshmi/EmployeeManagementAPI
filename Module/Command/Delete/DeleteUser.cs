@@ -1,6 +1,6 @@
 ﻿using EmployeeManagementAPI.Model;
 using MediatR;
-using static EmployeeManagementAPI.ExceptionHandling.UpdateException;
+using static EmployeeManagementAPI.ExceptionHandling.ExceptionModel;
 
 namespace EmployeeManagementAPI.Data.Command.Delete
 {
@@ -34,8 +34,7 @@ namespace EmployeeManagementAPI.Data.Command.Delete
             ResultValue Entity = new();
 
             var result = _dbContext.managementApplications.Where(x => x.EmployeeID==request.EmployeeId).FirstOrDefault();
-            try
-            {
+           
                 
 
                 // If EmployeeId is Invalid returns null
@@ -43,21 +42,15 @@ namespace EmployeeManagementAPI.Data.Command.Delete
                 {
                     _dbContext.managementApplications.Remove(result);
                     var value = await _dbContext.SaveChangesAsync();
-                    Entity.id=value;
+                    Entity.ResponseValue=value;
                     Entity.additionalInfo="1 Row Affected";
                     return Entity;
                 }
                 else
-                {
-                    Entity.additionalInfo="0 Rows Affected";
-                    
-                    throw new Exception();
+                { 
+                     throw new EmployeeBadRequestException();
                 }
-            }
-            catch(Exception) 
-            {
-                throw new EmployeeBadRequestException();
-            }
+            
         }
     }
 }

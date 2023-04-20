@@ -6,9 +6,9 @@ namespace EmployeeManagementAPI.Fluent_Validation
     /// <summary>
     /// Validation for EmployeeName
     /// </summary>
-    public class NameValidation : PropertyValidator
+    public class NameValidator : PropertyValidator
     {
-        public NameValidation() : base("Invaild")
+        public NameValidator() : base("Invaild Name")
         {
         }
         /// <summary>
@@ -18,7 +18,7 @@ namespace EmployeeManagementAPI.Fluent_Validation
         /// <returns></returns>
         protected override bool IsValid(PropertyValidatorContext context)
         {
-           Regex regex = new Regex(@"^[a-zA-Z''-'\s]{1,40}$", RegexOptions.IgnoreCase);
+           Regex regex = new Regex(@"^[a-zA-Z''-'\s]{1,15}$", RegexOptions.IgnoreCase);
            return regex.IsMatch((string)context.PropertyValue);
             
         }
