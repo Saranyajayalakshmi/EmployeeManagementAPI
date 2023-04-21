@@ -16,7 +16,7 @@ namespace EmployeeManagementAPI.Fluent_Validation
         protected override bool IsValid(PropertyValidatorContext context)
         {
            var phonenumber = context.PropertyValue.ToString();
-            if (phonenumber.Length<= 9)
+            if (phonenumber.Length<= 10)
               return true;
             else 
                 return false;

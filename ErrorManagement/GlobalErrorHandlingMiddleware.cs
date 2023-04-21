@@ -9,12 +9,10 @@ namespace EmployeeManagementAPI.ErrorManagement
     public class GlobalErrorHandlingMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILoggerService _logger;
-
-        public GlobalErrorHandlingMiddleware(RequestDelegate next, ILoggerService loggerService)
+        
+        public GlobalErrorHandlingMiddleware(RequestDelegate next)
         {
             _next = next;
-            _logger = loggerService;
         }
         public async Task Invoke(HttpContext context)
         {
@@ -24,7 +22,6 @@ namespace EmployeeManagementAPI.ErrorManagement
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Something went Wrong:{ex}");
                 await HandleExceptionAsync(context, ex);
             }
         }
@@ -40,7 +37,6 @@ namespace EmployeeManagementAPI.ErrorManagement
             if (exceptionType == typeof(EmployeeBadRequestException))
             {
                 message = exception.Message;
-              //  message=exception.InnerException;
                 status = HttpStatusCode.BadRequest;
                 stackTrace = exception.StackTrace;
             }
@@ -48,7 +44,6 @@ namespace EmployeeManagementAPI.ErrorManagement
             {
                 message = exception.Message;
                 status = HttpStatusCode.NotFound;
-                //stackTrace = exception.StackTrace;
             }
             else if (exceptionType == typeof(IdNotFoundException))
             {

@@ -1,7 +1,7 @@
 ﻿using EmployeeManagementAPI.Data.Command.Create;
 using EmployeeManagementAPI.Data.Command.Delete;
 using EmployeeManagementAPI.Data.Command.Update;
-using EmployeeManagementAPI.Data.Query;
+using EmployeeManagementAPI.Data.Handlers;
 using EmployeeManagementAPI.Model;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -12,25 +12,23 @@ namespace EmployeeManagementAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    
-    
 
     public class EmployeeManageController : ControllerBase
     {
         // Adding Mediator in Controller
         private IMediator _mediator;
-       
+
         /// <summary>
         /// Creating Mediator for EmployeeManagement Controller 
         /// </summary>
         /// <param name="mediator"></param>
-        
-      
+
+
 
         public EmployeeManageController(IMediator mediator)
         {
             _mediator=mediator;
-            
+
         }
         #region Queries
         /// <summary>
@@ -42,21 +40,18 @@ namespace EmployeeManagementAPI.Controllers
 
         public async Task<List<EmployeeManagementApplication>> EmployeeManagementListDetails()
         {
-            var employeelist = await _mediator.Send(new GetEmployeeListQuery()); // Retrieving from Query
+            var employeelist = await _mediator.Send(new GetEmployeeList()); // Retrieving from Query
             return employeelist;
         }
 
 
         /// <summary>
-        /// Getting EmployeeDetails by EmployeeId
+        /// Get EmployeeDetails by EmployeeId
         /// </summary>
         /// <remarks>
-        /// {
         /// 
-        ///     "EmployeeId":"1"
-        ///     
-        ///  }
-        ///     
+        ///     "id":"1"
+        ///    
         /// </remarks>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -66,8 +61,7 @@ namespace EmployeeManagementAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<EmployeeManagementApplication> EmployeeManagementDetailsById(int id)
         {
-
-            var employeeId = await _mediator.Send(new GetEmployeeByIdQuery() { Id=id });
+            var employeeId = await _mediator.Send(new GetEmployeeDetail() { Id=id });//Retrieving from Query
             return employeeId;
         }
         #endregion
@@ -75,9 +69,13 @@ namespace EmployeeManagementAPI.Controllers
 
         #region Commands
         /// <summary>
-        /// Create List of Users 
+        /// Create Users 
         /// </summary>
         /// <remarks>
+        /// 
+        /// Example Value
+        /// ------- -----
+        /// 
         /// {
         /// 
         ///            "EmployeeName" ="sara",
@@ -101,26 +99,21 @@ namespace EmployeeManagementAPI.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public async Task<IActionResult> AddEmployeeDetails(CreateUser addEmployee)
+        public async Task<ResultResponse> AddEmployeeDetails(CreateUser addEmployee)
         {
-            //EmployeeDetails is 0 or null throws StatusError
-            if (addEmployee==null)
-            {
-                return StatusCode(StatusCodes.Status400BadRequest, addEmployee);
-            }
-            else
-            {
-               
-                var result = await _mediator.Send(addEmployee);
-                return Ok(result);
-              
-            }
+            var result = await _mediator.Send(addEmployee);
+            return result;
+
+
         }
 
         /// <summary>
         /// Updates Employee Details 
         /// </summary>
         /// <remarks>
+        /// 
+        /// Example Value
+        /// ------- -----
         /// {
         /// 
         ///            "EmployeeId" = "1",
@@ -145,18 +138,12 @@ namespace EmployeeManagementAPI.Controllers
         // PUT api/<EmployeeManageController>/5
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateEmployeeDetails(UpdateUser updateEmployee)
+        public async Task<ResultResponse> UpdateEmployeeDetails(UpdateUser updateEmployee)
         {
-            //UpdateEmployee if null throws StatusError
-            if (updateEmployee==null)
-            {
-                return StatusCode(StatusCodes.Status400BadRequest, updateEmployee);
-            }
-            else
-            {
-                var ValueReturn = await _mediator.Send(updateEmployee);
-                return Ok(ValueReturn);
-            }
+
+            var ValueReturn = await _mediator.Send(updateEmployee);
+            return ValueReturn;
+
         }
 
         /// <summary>
@@ -176,7 +163,7 @@ namespace EmployeeManagementAPI.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public Task<ResultValue> DeleteEmployeeDetails(DeleteUser deleteUser)
+        public Task<ResultResponse> DeleteEmployeeDetails(DeleteUser deleteUser)
         {
             var result = _mediator.Send(new DeleteUser() { EmployeeId=deleteUser.EmployeeId });//By EmployeeId from deleteuser
             return result;

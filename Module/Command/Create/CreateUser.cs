@@ -12,24 +12,9 @@ namespace EmployeeManagementAPI.Data.Command.Create
     /// <summary>
     /// Create User
     /// </summary>
-    public class CreateUser : IRequest<ResultValue>
-    {
-        public CreateUser()
-        {
-        }
-
-        //Properties to Create user
-        public CreateUser(string employeeName, string employeeEmailId, string employeeMobileNumber, string employeeAddress, string employeeMaritalStatus, DateTime employeeDateOfJoining)
-        {
-
-            EmployeeName=employeeName;
-            EmployeeEmailId=employeeEmailId;
-            EmployeeMobileNumber=employeeMobileNumber;
-            EmployeeAddress=employeeAddress;
-            EmployeeMaritalStatus=employeeMaritalStatus;
-            EmployeeDateOfJoining=employeeDateOfJoining;
-        }
-
+    public class CreateUser : IRequest<ResultResponse>
+    {        //Properties to Create user
+       
         public string EmployeeName { get; set; }
         public string EmployeeEmailId { get; set; }
         public string EmployeeMobileNumber { get; set; }
@@ -39,7 +24,7 @@ namespace EmployeeManagementAPI.Data.Command.Create
     }
 
 
-    public class CreateEmployeeHandler : IRequestHandler<CreateUser, ResultValue>
+    public class CreateEmployeeHandler : IRequestHandler<CreateUser, ResultResponse>
     {
         DataDbContext _dbContext;
 
@@ -53,12 +38,16 @@ namespace EmployeeManagementAPI.Data.Command.Create
 
         //Add the EmployeeDetails in tables
 
-        public async Task<ResultValue> Handle(CreateUser request, CancellationToken cancellationToken)
+        public async Task<ResultResponse> Handle(CreateUser request, CancellationToken cancellationToken)
         {
-            ResultValue result = new ResultValue();
+            ResultResponse result = new ResultResponse();
 
             var EmployeeDetails = new EmployeeManagementApplication();
-
+            var MobileNumberExists = _dbContext.managementApplications.Where(x => x.EmployeeMobileNumber==request.EmployeeMobileNumber).ToList();
+            if (MobileNumberExists.Count>0)
+            {
+                throw new Exception();
+            }
 
             //assignining values to Employeetables
 
@@ -84,11 +73,5 @@ namespace EmployeeManagementAPI.Data.Command.Create
             }
             return result;
         }
-           
-            
-
-
-        
-
     }
 }

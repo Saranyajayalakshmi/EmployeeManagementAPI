@@ -1,6 +1,6 @@
 ﻿namespace EmployeeManagementAPI.Model
 {
-    public class ResultValue
+    public class ResultResponse
     {
         /// <summary>
         /// Stores the Result in Model

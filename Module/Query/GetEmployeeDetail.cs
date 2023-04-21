@@ -1,16 +1,19 @@
-﻿using EmployeeManagementAPI.Data.Query;
-using EmployeeManagementAPI.Model;
+﻿using EmployeeManagementAPI.Model;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using static EmployeeManagementAPI.ExceptionHandling.ExceptionModel;
 
 namespace EmployeeManagementAPI.Data.Handlers
 {
+    public class GetEmployeeDetail : IRequest<EmployeeManagementApplication>
+    {
+        public int Id { get; set; }//Id Property
+    }
     /// <summary>
     /// Getting EmployeeManagement Details by EmployeeId
     /// </summary>
 
-    public class GetEmployeeById : IRequestHandler<GetEmployeeByIdQuery, EmployeeManagementApplication>
+    public class GetEmployeeById : IRequestHandler<GetEmployeeDetail, EmployeeManagementApplication>
     {
         private readonly DataDbContext _dbContext;
 
@@ -34,9 +37,9 @@ namespace EmployeeManagementAPI.Data.Handlers
         /// <param name="request"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-      
+
         //EmployeeDetails by using EmployeeID
-        public  Task<EmployeeManagementApplication> Handle(GetEmployeeByIdQuery request, CancellationToken cancellationToken)
+        public Task<EmployeeManagementApplication> Handle(GetEmployeeDetail request, CancellationToken cancellationToken)
         {
             var EmployeeIdresult = _dbContext.managementApplications.Where(x => x.EmployeeID==request.Id).FirstOrDefaultAsync();
             if (EmployeeIdresult.Result==null)

@@ -7,7 +7,7 @@ namespace EmployeeManagementAPI.Data.Command.Delete
 
     // DeleteUser by EmployeeId
 
-    public class DeleteUser : IRequest<ResultValue>
+    public class DeleteUser : IRequest<ResultResponse>
     {
         public int EmployeeId { get; set; }
     }
@@ -16,7 +16,7 @@ namespace EmployeeManagementAPI.Data.Command.Delete
     // Delete Request & Handler
   
 
-    public class DeleteEmployeeHandler : IRequestHandler<DeleteUser, ResultValue>
+    public class DeleteEmployeeHandler : IRequestHandler<DeleteUser, ResultResponse>
     {
         private readonly DataDbContext _dbContext;
         
@@ -29,15 +29,13 @@ namespace EmployeeManagementAPI.Data.Command.Delete
         
         // Delete EmployeeDetails by EmployeeId
         
-        public async Task<ResultValue> Handle(DeleteUser request, CancellationToken cancellationToken)
+        public async Task<ResultResponse> Handle(DeleteUser request, CancellationToken cancellationToken)
         {
-            ResultValue Entity = new();
+            ResultResponse Entity = new ResultResponse();
 
             var result = _dbContext.managementApplications.Where(x => x.EmployeeID==request.EmployeeId).FirstOrDefault();
-           
-                
-
-                // If EmployeeId is Invalid returns null
+                           
+                // Returns Additionalinfo and ResponseValue
                 if (result != null)
                 {
                     _dbContext.managementApplications.Remove(result);

@@ -20,8 +20,9 @@ namespace EmployeeManagementAPI.Model
         // Validate for DateOfJoining
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (EmployeeDateOfJoining == DateTime.Today) { yield break; }
+            if (EmployeeDateOfJoining == DateTime.MinValue) { yield break; }
         }
 
     }
 }
+ 
