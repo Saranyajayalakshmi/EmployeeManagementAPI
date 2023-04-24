@@ -55,6 +55,10 @@ builder.Services.AddSwaggerGen(c => {
 builder.Services.AddApiVersioningConfigured();
 var app = builder.Build();
 
+
+
+
+
 // Configure the HTTP request pipeline.
 
 if (app.Environment.IsDevelopment())

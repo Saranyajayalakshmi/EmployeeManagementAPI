@@ -57,7 +57,8 @@ namespace EmployeeManagementAPI.Controllers
         /// <returns></returns>
 
         // GET api/<EmployeeManageController>/5
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("GetEmployeeDetail")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<EmployeeManagementApplication> EmployeeManagementDetailsById(int id)
         {
@@ -136,7 +137,7 @@ namespace EmployeeManagementAPI.Controllers
         /// <returns>returns EmployeeId and Additional info </returns>
 
         // PUT api/<EmployeeManageController>/5
-        [HttpPut("{id}")]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ResultResponse> UpdateEmployeeDetails(UpdateUser updateEmployee)
         {

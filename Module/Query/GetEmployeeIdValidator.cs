@@ -1,4 +1,5 @@
 ﻿using EmployeeManagementAPI.Data.Handlers;
+using EmployeeManagementAPI.Fluent_Validation;
 using FluentValidation;
 
 namespace EmployeeManagementAPI.Module.Query
@@ -7,7 +8,7 @@ namespace EmployeeManagementAPI.Module.Query
     {
         public GetEmployeeIdValidator()
         {
-            RuleFor(x => x.Id).NotEmpty().NotNull().GreaterThan(0);
+            RuleFor(x => x.Id).NotNull();/*SetValidator(new GetByIdValidator()).When(x=>x.Id!=null);*/
         }
     }
 }

@@ -8,7 +8,7 @@ namespace EmployeeManagementAPI.Model
     public class EmployeeManagementApplication : IValidatableObject
     {
         [Key]
-        public int EmployeeID { get; set; }
+        public int EmployeeID { get; set; } 
         public string EmployeeName { get; set; }
         public string EmployeeEmailId { get; set; }
         public string EmployeeMobileNumber { get; set; }
