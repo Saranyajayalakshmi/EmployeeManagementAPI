@@ -37,7 +37,6 @@ namespace EmployeeManagementAPI.Controllers
         /// <returns> Gives EmployeeManagement List Details</returns>
         // GET: api/<EmployeeManageController>
         [HttpGet]
-
         public async Task<List<EmployeeManagementApplication>> EmployeeManagementListDetails()
         {
             var employeelist = await _mediator.Send(new GetEmployeeList()); // Retrieving from Query
@@ -57,10 +56,10 @@ namespace EmployeeManagementAPI.Controllers
         /// <returns></returns>
 
         // GET api/<EmployeeManageController>/5
-        [HttpGet]
-        [Route("GetEmployeeDetail")]
+        [HttpGet("{id}")]
+     
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<EmployeeManagementApplication> EmployeeManagementDetailsById(int id)
+        public async Task<EmployeeManagementApplication> EmployeeManagementDetailsById([FromRoute]int id)
         {
             var employeeId = await _mediator.Send(new GetEmployeeDetail() { Id=id });//Retrieving from Query
             return employeeId;
@@ -164,9 +163,9 @@ namespace EmployeeManagementAPI.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
-        public Task<ResultResponse> DeleteEmployeeDetails(DeleteUser deleteUser)
+        public Task<ResultResponse> DeleteEmployeeDetails([FromRoute]int id)
         {
-            var result = _mediator.Send(new DeleteUser() { EmployeeId=deleteUser.EmployeeId });//By EmployeeId from deleteuser
+            var result = _mediator.Send(new DeleteUser() { EmployeeId=id });//By EmployeeId from deleteuser
             return result;
         }
         #endregion
