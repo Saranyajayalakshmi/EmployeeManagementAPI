@@ -1,22 +1,12 @@
-using EmployeeManagementAPI.Data;
-using Microsoft.EntityFrameworkCore;
-using MediatR;
-using System.Reflection;
-using FluentValidation;
-using FluentValidation.AspNetCore;
-using System;
-using EmployeeManagementAPI.Fluent_Validation;
-using EmployeeManagementAPI.Model;
 using EmployeeManagementAPI.Behaviour;
-using EmployeeManagementAPI.ExceptionHandling;
-using Microsoft.Extensions.DependencyInjection;
+using EmployeeManagementAPI.Data;
 using EmployeeManagementAPI.ErrorManagement;
-using Serilog;
+using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using EmployeeManagementAPI.LogError;
-using NLog;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
+using Serilog;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -79,7 +69,7 @@ app.AddGlobalErrorHandler();
 
 app.UseHttpsRedirection();
 
-//app.UseAuthorization();
+app.UseAuthorization();
 
 app.MapControllers();
 
