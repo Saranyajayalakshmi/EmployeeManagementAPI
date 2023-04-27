@@ -5,6 +5,8 @@ using EmployeeManagementAPI.Data.Handlers;
 using EmployeeManagementAPI.Model;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Net.Sockets;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -30,13 +32,29 @@ namespace EmployeeManagementAPI.Controllers
             _mediator=mediator;
 
         }
+        [HttpGet]
+        public ActionResult<IEnumerable<string>> GetIPAddress()
+        {
+            string ipAddress = string.Empty;
+            IPAddress ip = Request.HttpContext.Connection.RemoteIpAddress;
+            if (ip != null)
+            {
+                if (ip.AddressFamily==AddressFamily.InterNetwork)
+                {
+                    ip = Dns.GetHostEntry(ip).AddressList.First(x => x.AddressFamily == AddressFamily.InterNetwork);
+                }
+                ipAddress = ip.ToString();
+            }
+            return Ok(ipAddress);
+        }
+
         #region Queries
         /// <summary>
         /// Get EmployeeList 
         /// </summary>
         /// <returns> Gives EmployeeManagement List Details</returns>
         // GET: api/<EmployeeManageController>
-        [HttpGet]
+        [HttpGet("")]
         public async Task<List<EmployeeManagementApplication>> EmployeeManagementListDetails()
         {
             var employeelist = await _mediator.Send(new GetEmployeeList()); // Retrieving from Query
@@ -65,8 +83,7 @@ namespace EmployeeManagementAPI.Controllers
             return employeeId;
         }
         #endregion
-
-
+       
         #region Commands
         /// <summary>
         /// Create Users 

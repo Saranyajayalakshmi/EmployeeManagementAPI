@@ -3,9 +3,11 @@ using EmployeeManagementAPI.Data;
 using EmployeeManagementAPI.ErrorManagement;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using System.Net;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,8 +45,15 @@ builder.Services.AddSwaggerGen(c => {
     c.IncludeXmlComments(xmlPath);
 });
 builder.Services.AddApiVersioningConfigured();
-var app = builder.Build();
 
+builder.Services.Configure<ForwardedHeadersOptions>(Options =>
+{
+    Options.KnownProxies.Add(IPAddress.Parse("http://192.168.0.217:7135"));
+});
+
+
+
+var app = builder.Build();
 
 
 
@@ -63,7 +72,11 @@ if (app.Environment.IsDevelopment())
             options.SwaggerEndpoint($"{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
         }
     });
-   
+    app.UseForwardedHeaders(new ForwardedHeadersOptions
+    {
+        ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+    });
+
 }
 app.AddGlobalErrorHandler();
 
